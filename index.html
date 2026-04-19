@@ -207,10 +207,11 @@
       <div class="card">
         <h2>Estado de la aventura</h2>
         <div class="stats">
-          <div class="stat"><span>Tesoros</span><strong id="treasuresUI">3</strong></div>
+          <div class="stat"><span>Tesoros</span><strong id="treasuresUI">0/3</strong></div>
           <div class="stat"><span>Nivel</span><strong id="levelUI">1</strong></div>
           <div class="stat"><span>Pasos</span><strong id="stepsUI">0</strong></div>
           <div class="stat"><span>Cookie ayuda</span><strong id="cookieUI">2</strong></div>
+          <div class="stat"><span>Vidas</span><strong id="livesUI">3</strong></div>
         </div>
       </div>
 
@@ -224,7 +225,7 @@
         <div class="message" id="messageUI">Pulsa Empezar aventura</div>
       </div>
       <canvas id="gameCanvas" width="960" height="600"></canvas>
-      <div class="footer-note">Pendiente agregar personajes y mejorar calidad :P</div>
+      <div class="footer-note">Recolecta los tesoros del mapa para avanzar.</div>
     </main>
   </div>
 
@@ -247,6 +248,7 @@
     const levelUI = document.getElementById('levelUI');
     const stepsUI = document.getElementById('stepsUI');
     const cookieUI = document.getElementById('cookieUI');
+    const livesUI = document.getElementById('livesUI');
     const messageUI = document.getElementById('messageUI');
     const startBtn = document.getElementById('startBtn');
     const restartBtn = document.getElementById('restartBtn');
@@ -254,6 +256,7 @@
     const TILE = 48;
     const ROWS = 10;
     const COLS = 16;
+    const REQUIRED_TREASURES = 3;
 
     const GAME = {
       title: 'title',
@@ -279,7 +282,7 @@
       {
         start: { x: 1, y: 1 },
         goal: { x: 14, y: 8 },
-        chests: [{x:2,y:7},{x:8,y:2},{x:13,y:4},{x:5,y:4}],
+        chests: [{x:2,y:7},{x:8,y:2},{x:13,y:4}],
         walls: [
           [3,2],[3,3],[3,4],[3,5],[3,6],
           [6,1],[7,1],[8,1],[9,1],
@@ -292,7 +295,7 @@
       {
         start: { x: 1, y: 8 },
         goal: { x: 14, y: 1 },
-        chests: [{x:3,y:1},{x:5,y:7},{x:10,y:2},{x:13,y:8}],
+        chests: [{x:3,y:1},{x:5,y:7},{x:10,y:2}],
         walls: [
           [2,3],[3,3],[4,3],[5,3],[6,3],
           [8,1],[8,2],[8,3],[8,4],[8,5],
@@ -307,9 +310,10 @@
     const state = {
       phase: GAME.title,
       level: 0,
-      treasures: 3,
+      treasures: 0,
       steps: 0,
       cookieCharges: 2,
+      lives: 3,
       invulnerable: 0,
       flashTimer: 0,
       message: '',
@@ -329,10 +333,11 @@
     }
 
     function updateUI() {
-      treasuresUI.textContent = state.treasures;
+      treasuresUI.textContent = `${state.treasures}/${REQUIRED_TREASURES}`;
       levelUI.textContent = state.level + 1;
       stepsUI.textContent = state.steps;
       cookieUI.textContent = state.cookieCharges;
+      livesUI.textContent = state.lives;
     }
 
     function loadLevel(index) {
@@ -343,6 +348,7 @@
       state.goal = { ...lvl.goal };
       state.cookieCharges = 2;
       state.invulnerable = 0;
+      state.treasures = 0;
       state.monsters = lvl.monsters.map(m => ({
         x: m.x,
         y: m.y,
@@ -354,18 +360,19 @@
 
     function startGame() {
       state.phase = GAME.playing;
-      state.treasures = 3;
       state.steps = 0;
+      state.lives = 3;
       loadLevel(0);
-      setMessage('La noche cae sobre Rimac... protege los tesoros.');
+      setMessage('Recolecta los 3 tesoros del mapa y llega al punto B.');
     }
 
     function restartGame() {
       state.phase = GAME.title;
       state.level = 0;
-      state.treasures = 3;
+      state.treasures = 0;
       state.steps = 0;
       state.cookieCharges = 2;
+      state.lives = 3;
       state.invulnerable = 0;
       setMessage('Pulsa Enter pe sano');
       updateUI();
@@ -377,6 +384,24 @@
 
     function occupiedByMonster(x, y, ignored = null) {
       return state.monsters.some(m => m !== ignored && m.x === x && m.y === y);
+    }
+
+    function collectChestIfPresent() {
+      const chestIndex = state.currentLevel.chests.findIndex(
+        chest => chest.x === state.player.x && chest.y === state.player.y
+      );
+
+      if (chestIndex !== -1) {
+        state.currentLevel.chests.splice(chestIndex, 1);
+        state.treasures += 1;
+        updateUI();
+
+        if (state.treasures >= REQUIRED_TREASURES) {
+          setMessage('¡Ya tienes los 3 tesoros! Ahora llega al punto B.');
+        } else {
+          setMessage(`¡Tesoro recogido! Llevas ${state.treasures}/${REQUIRED_TREASURES}.`);
+        }
+      }
     }
 
     function movePlayer(dx, dy) {
@@ -391,15 +416,22 @@
       state.player.x = nx;
       state.player.y = ny;
       state.steps += 1;
+
+      collectChestIfPresent();
       updateUI();
 
       if (state.player.x === state.goal.x && state.player.y === state.goal.y) {
+        if (state.treasures < REQUIRED_TREASURES) {
+          setMessage(`Aún te faltan ${REQUIRED_TREASURES - state.treasures} tesoro(s) para pasar.`);
+          return;
+        }
+
         if (state.level < levels.length - 1) {
           loadLevel(state.level + 1);
-          setMessage('¡Nivel superado! Los monstruos son más agresivos...');
+          setMessage('¡Nivel superado! Recolecta los 3 tesoros del siguiente mapa.');
         } else {
           state.phase = GAME.win;
-          setMessage('¡Yasuo y Cookie salvaron los tesoros de Rimac!');
+          setMessage('¡Yasuo y Cookie reunieron todos los tesoros de Rimac!');
         }
       }
     }
@@ -489,17 +521,17 @@
 
       for (const monster of state.monsters) {
         if (monster.x === state.player.x && monster.y === state.player.y) {
-          state.treasures -= 1;
+          state.lives -= 1;
           state.invulnerable = 80;
           state.flashTimer = 14;
           state.player = { ...state.currentLevel.start };
           updateUI();
 
-          if (state.treasures <= 0) {
+          if (state.lives <= 0) {
             state.phase = GAME.over;
-            setMessage('Los monstruos nocturnos robaron todos los tesoros...');
+            setMessage('Los monstruos nocturnos detuvieron a Yasuo y Cookie...');
           } else {
-            setMessage('¡Perdiste un tesoro! Intenta cruzar otra vez.');
+            setMessage(`¡Te atrapó un monstruo! Vuelves al inicio. Vidas restantes: ${state.lives}.`);
           }
           break;
         }
@@ -653,11 +685,11 @@
     }
 
     function drawTreasuresBar() {
-      for (let i = 0; i < state.treasures; i++) {
-        ctx.fillStyle = '#ffd166';
+      for (let i = 0; i < REQUIRED_TREASURES; i++) {
+        ctx.fillStyle = i < state.treasures ? '#ffd166' : '#4b4f70';
         ctx.fillRect(16 + i * 20, 12, 14, 14);
 
-        ctx.fillStyle = '#fff0a6';
+        ctx.fillStyle = i < state.treasures ? '#fff0a6' : '#2e3146';
         ctx.fillRect(19 + i * 20, 15, 7, 7);
       }
     }
@@ -668,7 +700,8 @@
 
       ctx.fillStyle = '#ffd166';
       ctx.font = 'bold 22px Courier New';
-      ctx.fillText('TESOROS: ' + state.treasures, 16, 31);
+      ctx.fillText('TESOROS: ' + state.treasures + '/' + REQUIRED_TREASURES, 16, 31);
+      ctx.fillText('VIDAS: ' + state.lives, 300, 31);
       ctx.fillText('RIMAC - NIVEL ' + (state.level + 1), 620, 31);
 
       drawTreasuresBar();
@@ -787,7 +820,7 @@
       }
 
       if (state.phase === GAME.over) {
-        drawEndOverlay('Fin del juego', 'Los tesoros se han perdido');
+        drawEndOverlay('Fin del juego', 'Los monstruos te detuvieron');
       }
     }
 

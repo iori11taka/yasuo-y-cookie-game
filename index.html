@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -228,7 +228,7 @@
       <canvas id="gameCanvas"></canvas>
 
       <div class="footer-note">
-        Pendiente: agregar personajes, mejorar mapa y movimientos
+        Ahora el mapa usa una imagen de fondo personalizada
       </div>
     </main>
   </div>
@@ -244,8 +244,17 @@
     const cookieImg = new Image();
     cookieImg.src = "imagenes/cookie.png";
 
-    const fondoInicio = new Image();
-    fondoInicio.src = "imagenes/rimacfondo1.png";
+const fondoInicio = new Image();
+fondoInicio.src = "imagenes/rimacfondo1.png";
+
+const gameFondo = new Image();
+gameFondo.src = "imagenes/gamefondo.png";
+
+const gameFondo2 = new Image();
+gameFondo2.src = "imagenes/gamefondo2.png";
+
+const gameFondo3 = new Image();
+gameFondo3.src = "imagenes/gamefondo3.png";
 
     const treasuresUI = document.getElementById('treasuresUI');
     const levelUI = document.getElementById('levelUI');
@@ -276,7 +285,7 @@
     };
 
     const levels = [
-      {
+ {
         start: { x: 1, y: 12 },
         goal: { x: 20, y: 1 },
         chests: [{ x: 4, y: 2 }, { x: 10, y: 6 }, { x: 18, y: 10 }],
@@ -289,37 +298,27 @@
           [8,4],[9,4],[10,4],[11,4],
           [18,4],[18,5],[18,6]
         ],
-        monsters: [{ x: 7, y: 2 }, { x: 12, y: 6 }, { x: 17, y: 9 }],
-        torches: [{ x: 2, y: 1 }, { x: 11, y: 1 }, { x: 19, y: 7 }],
-        pathTiles: [
-          [1,12],[2,12],[3,12],[4,12],[5,12],[6,12],[7,12],[8,12],
-          [8,11],[8,10],[8,9],[8,8],[9,8],[10,8],[11,8],[12,8],[13,8],
-          [14,8],[15,8],[16,8],[17,8],[18,8],
-          [18,7],[18,6],[19,6],[20,6],[20,5],[20,4],[20,3],[20,2],[20,1]
-        ]
+        monsters: [{ x: 7, y: 2 }, { x: 12, y: 6 }, { x: 17, y: 9 }]
       },
-      {
-        start: { x: 1, y: 1 },
-        goal: { x: 20, y: 12 },
-        chests: [{ x: 3, y: 11 }, { x: 11, y: 2 }, { x: 18, y: 6 }],
-        walls: [
-          [4,2],[4,3],[4,4],[4,5],[4,6],[4,7],
-          [7,1],[8,1],[9,1],[10,1],[11,1],
-          [8,5],[9,5],[10,5],[11,5],[12,5],[13,5],
-          [16,7],[16,8],[16,9],
-          [7,10],[8,10],[9,10],[10,10],[11,10],
-          [18,2],[18,3],[18,4]
-        ],
-        monsters: [{ x: 6, y: 3 }, { x: 13, y: 2 }, { x: 14, y: 10 }, { x: 19, y: 4 }],
-        torches: [{ x: 2, y: 2 }, { x: 13, y: 1 }, { x: 18, y: 8 }],
-        pathTiles: [
-          [1,1],[2,1],[3,1],[4,1],[5,1],[6,1],
-          [6,2],[6,3],[6,4],[6,5],[6,6],
-          [7,6],[8,6],[9,6],[10,6],[11,6],[12,6],[13,6],[14,6],
-          [14,7],[14,8],[14,9],[15,9],[16,9],[17,9],[18,9],[19,9],
-          [19,10],[19,11],[19,12],[20,12]
-        ]
-      },
+{
+  start: { x: 1, y: 11 },
+  goal: { x: 0, y: 0 },
+  chests: [{ x: 6, y: 2 }, { x: 10, y: 11 }, { x: 18, y: 10 }],
+  walls: [
+    // lado izquierdo del río
+    [0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[11,5],
+    [0,6],[1,6],[2,6],[3,6],[4,6],[5,6],[6,6],[7,6],[8,6],[9,6],[10,6],[11,6],
+    [0,7],[1,7],[2,7],[3,7],[4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],
+    [0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,8],[7,8],[8,8],[9,8],[10,8],[11,8],
+
+    // lado derecho del río
+    [14,5],[15,5],[16,5],[17,5],[18,5],[19,5],[20,5],[21,5],
+    [14,6],[15,6],[16,6],[17,6],[18,6],[19,6],[20,6],[21,6],
+    [14,7],[15,7],[16,7],[17,7],[18,7],[19,7],[20,7],[21,7],
+    [14,8],[15,8],[16,8],[17,8],[18,8],[19,8],[20,8],[21,8]
+  ],
+  monsters: [{ x: 7, y: 3 }, { x: 10, y: 10 }, { x: 16, y: 9 }, { x: 18, y: 4 }]
+},
       {
         start: { x: 1, y: 12 },
         goal: { x: 20, y: 1 },
@@ -332,15 +331,7 @@
           [15,3],[15,4],[15,5],[15,6],
           [18,6],[19,6],[20,6]
         ],
-        monsters: [{ x: 6, y: 2 }, { x: 8, y: 10 }, { x: 14, y: 4 }, { x: 19, y: 9 }, { x: 12, y: 11 }],
-        torches: [{ x: 2, y: 1 }, { x: 12, y: 2 }, { x: 19, y: 8 }],
-        pathTiles: [
-          [1,12],[2,12],[3,12],[4,12],[5,12],[6,12],[7,12],
-          [7,11],[7,10],[7,9],[8,9],[9,9],[10,9],[11,9],[12,9],
-          [12,8],[12,7],[12,6],[12,5],
-          [13,5],[14,5],[15,5],[16,5],[17,5],[18,5],
-          [18,4],[18,3],[18,2],[19,2],[20,2],[20,1]
-        ]
+        monsters: [{ x: 6, y: 2 }, { x: 8, y: 10 }, { x: 14, y: 4 }, { x: 19, y: 9 }, { x: 12, y: 11 }]
       }
     ];
 
@@ -605,146 +596,171 @@
       ctx.fillStyle = color;
       ctx.fillRect(x, y, w, h);
     }
+    function drawCarObstacle(px, py) {
+  drawRectPixel(px + 4, py + 14, 37, 18, '#274690');
+  drawRectPixel(px + 10, py + 10, 24, 10, '#3b5dc9');
+  drawRectPixel(px + 14, py + 12, 6, 5, '#a9d6ff');
+  drawRectPixel(px + 24, py + 12, 6, 5, '#a9d6ff');
+  drawRectPixel(px + 7, py + 30, 8, 8, '#1b1b1b');
+  drawRectPixel(px + 30, py + 30, 8, 8, '#1b1b1b');
+  drawRectPixel(px + 8, py + 31, 4, 4, '#8c8c8c');
+  drawRectPixel(px + 31, py + 31, 4, 4, '#8c8c8c');
+}
 
-    function drawMonsterTile(tileX, tileY, stunned = false) {
-      const { px, py } = tileToPixel(tileX, tileY);
+function drawBarricadeObstacle(px, py) {
+  drawRectPixel(px + 5, py + 24, 35, 10, '#d08b3e');
+  drawRectPixel(px + 8, py + 14, 5, 24, '#6b4f2a');
+  drawRectPixel(px + 32, py + 14, 5, 24, '#6b4f2a');
 
-      const c1 = stunned ? '#9b5de5' : '#24185a';
-      const c2 = stunned ? '#c294ff' : '#ef476f';
-      const c3 = stunned ? '#f2e8ff' : '#ffffff';
+  drawRectPixel(px + 8, py + 25, 7, 3, '#fff2b2');
+  drawRectPixel(px + 16, py + 25, 7, 3, '#c94f3d');
+  drawRectPixel(px + 24, py + 25, 7, 3, '#fff2b2');
+  drawRectPixel(px + 32, py + 25, 5, 3, '#c94f3d');
+}
 
-      drawRectPixel(px + 10, py + 14, 28, 22, c1);
-      drawRectPixel(px + 6, py + 18, 6, 12, c1);
-      drawRectPixel(px + 36, py + 18, 6, 12, c1);
-      drawRectPixel(px + 14, py + 16, 8, 8, c3);
-      drawRectPixel(px + 26, py + 16, 8, 8, c3);
-      drawRectPixel(px + 17, py + 19, 4, 4, '#111');
-      drawRectPixel(px + 29, py + 19, 4, 4, '#111');
-      drawRectPixel(px + 16, py + 28, 16, 6, c2);
-      drawRectPixel(px + 19, py + 30, 2, 2, '#111');
-      drawRectPixel(px + 27, py + 30, 2, 2, '#111');
+function drawFenceObstacle(px, py) {
+  drawRectPixel(px + 4, py + 28, 37, 4, '#1f1f1f');
+
+  for (let i = 0; i < 5; i++) {
+    drawRectPixel(px + 6 + i * 8, py + 12, 4, 20, '#2e2e2e');
+    drawRectPixel(px + 5 + i * 8, py + 10, 6, 3, '#ffd166');
+  }
+
+  drawRectPixel(px + 4, py + 16, 37, 3, '#444');
+}
+
+function drawConeObstacle(px, py) {
+  drawRectPixel(px + 16, py + 10, 12, 6, '#ff9f1c');
+  drawRectPixel(px + 13, py + 16, 18, 10, '#ff7b00');
+  drawRectPixel(px + 10, py + 26, 24, 9, '#e36414');
+  drawRectPixel(px + 12, py + 20, 20, 3, '#fff4cc');
+  drawRectPixel(px + 8, py + 35, 28, 4, '#6c757d');
+}
+
+function drawBushObstacle(px, py) {
+  drawRectPixel(px + 8, py + 16, 28, 18, '#2f6f3e');
+  drawRectPixel(px + 4, py + 22, 10, 10, '#3f8f4f');
+  drawRectPixel(px + 30, py + 20, 10, 10, '#3f8f4f');
+  drawRectPixel(px + 14, py + 10, 16, 10, '#4fa85f');
+  drawRectPixel(px + 18, py + 18, 4, 4, '#7dd87d');
+  drawRectPixel(px + 25, py + 24, 4, 4, '#7dd87d');
+}
+
+function drawMonsterTile(tileX, tileY, stunned = false) {
+  const { px, py } = tileToPixel(tileX, tileY);
+
+  const c1 = stunned ? '#7b4ce2' : '#2b1d6b';
+  const c2 = stunned ? '#d2b7ff' : '#ff4d6d';
+  const c3 = '#ffffff';
+
+  drawRectPixel(px + 8, py + 12, 30, 22, '#0f1020');
+  drawRectPixel(px + 10, py + 14, 26, 18, c1);
+  drawRectPixel(px + 6, py + 18, 6, 10, c1);
+  drawRectPixel(px + 34, py + 18, 6, 10, c1);
+
+  drawRectPixel(px + 14, py + 16, 7, 7, c3);
+  drawRectPixel(px + 25, py + 16, 7, 7, c3);
+  drawRectPixel(px + 16, py + 18, 3, 3, '#111');
+  drawRectPixel(px + 27, py + 18, 3, 3, '#111');
+
+  drawRectPixel(px + 16, py + 27, 14, 5, c2);
+  drawRectPixel(px + 19, py + 28, 2, 2, '#111');
+  drawRectPixel(px + 25, py + 28, 2, 2, '#111');
+}
+
+function drawChestTile(tileX, tileY) {
+  const { px, py } = tileToPixel(tileX, tileY);
+
+  const pulse = Math.sin(Date.now() * 0.008 + tileX * 2 + tileY) * 2;
+  const glowY = py + 8 + pulse;
+
+  ctx.fillStyle = 'rgba(255, 215, 90, 0.22)';
+  ctx.fillRect(px + 3, glowY, 39, 28);
+
+  ctx.fillStyle = 'rgba(255, 245, 180, 0.18)';
+  ctx.fillRect(px + 8, glowY - 4, 28, 20);
+
+  drawRectPixel(px + 10, py + 34 + pulse, 26, 4, '#4e2f16');
+
+  drawRectPixel(px + 8, py + 17 + pulse, 30, 18, '#9f541d');
+  drawRectPixel(px + 8, py + 12 + pulse, 30, 8, '#f2b63f');
+
+  drawRectPixel(px + 12, py + 14 + pulse, 22, 3, '#fff3ae');
+  drawRectPixel(px + 21, py + 19 + pulse, 5, 10, '#5a3a18');
+  drawRectPixel(px + 20, py + 21 + pulse, 7, 6, '#ffe36c');
+
+  drawRectPixel(px + 6, py + 14 + pulse, 2, 19, '#fff8cd');
+  drawRectPixel(px + 38, py + 14 + pulse, 2, 19, '#c97f22');
+
+  drawRectPixel(px + 13, py + 9 + pulse, 3, 3, '#fffce1');
+  drawRectPixel(px + 31, py + 11 + pulse, 3, 3, '#fffce1');
+  drawRectPixel(px + 28, py + 7 + pulse, 2, 2, '#fffce1');
+
+  drawRectPixel(px + 5, py + 16 + pulse, 1, 16, '#fffde8');
+  drawRectPixel(px + 40, py + 16 + pulse, 1, 16, '#7a4516');
+}
+
+function drawMapBackground() {
+  let fondoActual = gameFondo;
+
+  if (state.level === 1) {
+    fondoActual = gameFondo2;
+  } else if (state.level === 2) {
+    fondoActual = gameFondo3;
+  }
+
+  if (fondoActual.complete && fondoActual.naturalWidth > 0) {
+    ctx.drawImage(fondoActual, OFFSET_X, OFFSET_Y, MAP_WIDTH, MAP_HEIGHT);
+  } else {
+    ctx.fillStyle = '#243b55';
+    ctx.fillRect(OFFSET_X, OFFSET_Y, MAP_WIDTH, MAP_HEIGHT);
+  }
+
+  ctx.fillStyle = 'rgba(10, 14, 30, 0.08)';
+  ctx.fillRect(OFFSET_X, OFFSET_Y, MAP_WIDTH, MAP_HEIGHT);
+}
+
+function drawWalls() {
+  for (const [wx, wy] of state.currentLevel.walls) {
+    if (state.level === 1) {
+      continue;
     }
 
-    function drawChestTile(tileX, tileY) {
-      const { px, py } = tileToPixel(tileX, tileY);
+    const { px, py } = tileToPixel(wx, wy);
+    const typeSeed = (wx * 7 + wy * 13) % 5;
 
-      drawRectPixel(px + 8, py + 18, 32, 18, '#b56c2d');
-      drawRectPixel(px + 8, py + 14, 32, 8, '#e4b144');
-      drawRectPixel(px + 12, py + 16, 24, 3, '#fff1a8');
-      drawRectPixel(px + 21, py + 20, 6, 9, '#5f3b19');
-      drawRectPixel(px + 22, py + 22, 4, 5, '#f4df6b');
+    if (typeSeed === 0) {
+      drawCarObstacle(px, py);
+    } else if (typeSeed === 1) {
+      drawBarricadeObstacle(px, py);
+    } else if (typeSeed === 2) {
+      drawFenceObstacle(px, py);
+    } else if (typeSeed === 3) {
+      drawConeObstacle(px, py);
+    } else {
+      drawBushObstacle(px, py);
     }
+  }
+}
 
-    function drawGrid() {
-      for (let y = 0; y < ROWS; y++) {
-        for (let x = 0; x < COLS; x++) {
-          const { px, py } = tileToPixel(x, y);
-          const alt = (x + y) % 2 === 0;
+function drawStartGoal() {
+  const startPos = tileToPixel(state.currentLevel.start.x, state.currentLevel.start.y);
+  const goalPos = tileToPixel(state.goal.x, state.goal.y);
 
-          ctx.fillStyle = alt ? '#1d694e' : '#1c5f4a';
-          ctx.fillRect(px, py, TILE, TILE);
+  drawRectPixel(startPos.px + 5, startPos.py + 6, 35, 35, '#6b3f1f');
+  drawRectPixel(startPos.px + 9, startPos.py + 10, 27, 27, '#b07d3c');
+  drawRectPixel(startPos.px + 16, startPos.py + 16, 13, 13, '#fff0b3');
+  ctx.fillStyle = '#3b240f';
+  ctx.font = 'bold 24px Courier New';
+  ctx.fillText('A', startPos.px + 15, startPos.py + 32);
 
-          ctx.fillStyle = alt ? '#2a8463' : '#2f8f6c';
-          ctx.fillRect(px + 6, py + 10, 6, 4);
-          ctx.fillRect(px + 24, py + 30, 5, 3);
-          ctx.fillRect(px + 34, py + 18, 4, 3);
-        }
-      }
-    }
-
-    function drawPath() {
-      if (!state.currentLevel?.pathTiles) return;
-
-      for (const [x, y] of state.currentLevel.pathTiles) {
-        const { px, py } = tileToPixel(x, y);
-
-        ctx.fillStyle = '#90755c';
-        ctx.fillRect(px, py, TILE, TILE);
-
-        ctx.fillStyle = '#a58a6f';
-        ctx.fillRect(px + 7, py + 10, 9, 6);
-        ctx.fillRect(px + 24, py + 24, 7, 5);
-      }
-    }
-
-    function drawNightSky() {
-      ctx.fillStyle = '#172352';
-      ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-      const moonX = gameCanvas.width - 120;
-      const moonY = 24;
-
-      ctx.fillStyle = '#f7f2c4';
-      ctx.fillRect(moonX, moonY, 26, 26);
-
-      ctx.fillStyle = '#172352';
-      ctx.fillRect(moonX + 10, moonY, 16, 24);
-
-      const stars = [
-        [80,20],[120,42],[180,28],[260,18],[320,38],
-        [520,30],[620,25],[710,18],[830,34],[900,22]
-      ];
-
-      ctx.fillStyle = '#e9f3ff';
-      for (const [sx, sy] of stars) {
-        if (sx < gameCanvas.width - 20) {
-          ctx.fillRect(sx, sy, 3, 3);
-        }
-      }
-    }
-
-    function drawTorches() {
-      if (!state.currentLevel?.torches) return;
-
-      for (const point of state.currentLevel.torches) {
-        const { px, py } = tileToPixel(point.x, point.y);
-
-        ctx.fillStyle = '#4d341c';
-        ctx.fillRect(px + 20, py + 14, 6, 24);
-
-        ctx.fillStyle = '#ffd166';
-        ctx.fillRect(px + 18, py, 10, 14);
-
-        ctx.fillStyle = '#ff8c42';
-        ctx.fillRect(px + 20, py + 2, 6, 10);
-      }
-    }
-
-    function drawWalls() {
-      for (const [wx, wy] of state.currentLevel.walls) {
-        const { px, py } = tileToPixel(wx, wy);
-
-        ctx.fillStyle = '#344067';
-        ctx.fillRect(px, py, TILE, TILE);
-
-        ctx.fillStyle = '#495b8a';
-        ctx.fillRect(px + 2, py + 2, 20, 12);
-        ctx.fillRect(px + 24, py + 16, 20, 12);
-        ctx.fillRect(px + 8, py + 30, 18, 10);
-      }
-    }
-
-    function drawStartGoal() {
-      const startPos = tileToPixel(state.currentLevel.start.x, state.currentLevel.start.y);
-      const goalPos = tileToPixel(state.goal.x, state.goal.y);
-
-      ctx.fillStyle = '#c63f46';
-      ctx.fillRect(startPos.px + 6, startPos.py + 6, 36, 36);
-
-      ctx.fillStyle = '#fff8df';
-      ctx.font = 'bold 28px Courier New';
-      ctx.fillText('A', startPos.px + 16, startPos.py + 33);
-
-      ctx.fillStyle = '#314d93';
-      ctx.fillRect(goalPos.px + 8, goalPos.py + 2, 32, 42);
-
-      ctx.fillStyle = '#2d2a42';
-      ctx.fillRect(goalPos.px + 14, goalPos.py + 10, 20, 34);
-
-      ctx.fillStyle = '#ffd166';
-      ctx.font = 'bold 26px Courier New';
-      ctx.fillText('B', goalPos.px + 17, goalPos.py + 35);
-    }
+  drawRectPixel(goalPos.px + 8, goalPos.py + 2, 30, 40, '#213a7a');
+  drawRectPixel(goalPos.px + 12, goalPos.py + 6, 22, 32, '#2f57b7');
+  drawRectPixel(goalPos.px + 16, goalPos.py + 10, 14, 24, '#fff0a8');
+  ctx.fillStyle = '#1b2550';
+  ctx.font = 'bold 24px Courier New';
+  ctx.fillText('B', goalPos.px + 16, goalPos.py + 31);
+}
 
     function drawTreasuresBar() {
       for (let i = 0; i < REQUIRED_TREASURES; i++) {
@@ -769,15 +785,15 @@
       drawTreasuresBar();
     }
 
-    function drawPlayer() {
-      const blink = state.invulnerable > 0 && Math.floor(state.invulnerable / 6) % 2 === 0;
-      if (blink) return;
+function drawPlayer() {
+  const blink = state.invulnerable > 0 && Math.floor(state.invulnerable / 6) % 2 === 0;
+  if (blink) return;
 
-      const { px, py } = tileToPixel(state.player.x, state.player.y);
+  const { px, py } = tileToPixel(state.player.x, state.player.y);
 
-      ctx.drawImage(yasuoImg, px + 2, py - 2, TILE, TILE);
-      ctx.drawImage(cookieImg, px + TILE * 0.45, py + TILE * 0.22, TILE * 0.55, TILE * 0.55);
-    }
+  ctx.drawImage(yasuoImg, px - 2, py - 8, TILE * 1.15, TILE * 1.15);
+  ctx.drawImage(cookieImg, px + TILE * 0.38, py + TILE * 0.28, TILE * 0.58, TILE * 0.58);
+}
 
     function drawChests() {
       for (const chest of state.currentLevel.chests) {
@@ -869,10 +885,7 @@
     function drawPlayingScene() {
       ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-      drawNightSky();
-      drawGrid();
-      drawPath();
-      drawTorches();
+      drawMapBackground();
       drawWalls();
       drawChests();
       drawStartGoal();

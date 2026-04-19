@@ -34,7 +34,7 @@
     }
 
     .layout {
-      width: min(1280px, 100%);
+      width: min(1380px, 100%);
       display: grid;
       grid-template-columns: 320px 1fr;
       gap: 18px;
@@ -168,8 +168,8 @@
 
     #gameCanvas {
       width: 100%;
-      max-width: 900px;
-      aspect-ratio: 16 / 10;
+      max-width: 1040px;
+      height: auto;
       display: block;
       margin: 0 auto;
       border-radius: 14px;
@@ -198,7 +198,7 @@
       <p class="subtitle"></p>
 
       <div class="card">
-        <h2>Cuidado con las criaturas de la noche...</h2>
+        <h2>Retrato</h2>
         <div class="portrait-wrap">
           <img src="imagenes/yasuoycookie8bit.png" id="portraitImg" alt="Yasuo y Cookie">
         </div>
@@ -221,18 +221,21 @@
 
     <main class="game-shell">
       <div class="topbar">
-        <div class="topbar-title">Cruza el Rimac y protege tus tesoros</div>
+        <div class="topbar-title">Cruza el Rimac y reúne los 3 tesoros</div>
         <div class="message" id="messageUI">Pulsa Empezar aventura</div>
       </div>
-      <canvas id="gameCanvas" width="960" height="600"></canvas>
-      <div class="footer-note">Recolecta los tesoros del mapa para avanzar.</div>
+
+      <canvas id="gameCanvas"></canvas>
+
+      <div class="footer-note">
+        Mapa centrado dinámicamente y ajustado al tamaño real del nivel.
+      </div>
     </main>
   </div>
 
   <script>
     const gameCanvas = document.getElementById('gameCanvas');
     const ctx = gameCanvas.getContext('2d');
-
     ctx.imageSmoothingEnabled = false;
 
     const yasuoImg = new Image();
@@ -253,10 +256,17 @@
     const startBtn = document.getElementById('startBtn');
     const restartBtn = document.getElementById('restartBtn');
 
-    const TILE = 48;
-    const ROWS = 10;
-    const COLS = 16;
+    const TILE = 45;
+    const ROWS = 14;
+    const COLS = 22;
     const REQUIRED_TREASURES = 3;
+
+    const HUD_HEIGHT = 52;
+    const SIDE_MARGIN = 24;
+    const TOP_MARGIN = 18;
+    const BOTTOM_MARGIN = 18;
+    const BASE_CANVAS_WIDTH = 960;
+    const BASE_CANVAS_HEIGHT = 600;
 
     const GAME = {
       title: 'title',
@@ -267,43 +277,70 @@
 
     const levels = [
       {
-        start: { x: 1, y: 8 },
-        goal: { x: 14, y: 1 },
-        chests: [{x:3,y:2},{x:7,y:4},{x:12,y:7}],
+        start: { x: 1, y: 12 },
+        goal: { x: 20, y: 1 },
+        chests: [{ x: 4, y: 2 }, { x: 10, y: 6 }, { x: 18, y: 10 }],
         walls: [
-          [4,1],[4,2],[4,3],[4,4],
-          [6,6],[7,6],[8,6],[9,6],
-          [10,2],[11,2],[12,2],
-          [11,4],[11,5],[11,6],
-          [2,6],[3,6],[4,6]
+          [5,2],[5,3],[5,4],[5,5],
+          [8,9],[9,9],[10,9],[11,9],[12,9],
+          [14,2],[15,2],[16,2],[17,2],
+          [15,5],[15,6],[15,7],[15,8],
+          [2,7],[3,7],[4,7],[5,7],
+          [8,4],[9,4],[10,4],[11,4],
+          [18,4],[18,5],[18,6]
         ],
-        monsters: [{x:6,y:2},{x:9,y:4},{x:13,y:6}]
+        monsters: [{ x: 7, y: 2 }, { x: 12, y: 6 }, { x: 17, y: 9 }],
+        torches: [{ x: 2, y: 1 }, { x: 11, y: 1 }, { x: 19, y: 7 }],
+        pathTiles: [
+          [1,12],[2,12],[3,12],[4,12],[5,12],[6,12],[7,12],[8,12],
+          [8,11],[8,10],[8,9],[8,8],[9,8],[10,8],[11,8],[12,8],[13,8],
+          [14,8],[15,8],[16,8],[17,8],[18,8],
+          [18,7],[18,6],[19,6],[20,6],[20,5],[20,4],[20,3],[20,2],[20,1]
+        ]
       },
       {
         start: { x: 1, y: 1 },
-        goal: { x: 14, y: 8 },
-        chests: [{x:2,y:7},{x:8,y:2},{x:13,y:4}],
+        goal: { x: 20, y: 12 },
+        chests: [{ x: 3, y: 11 }, { x: 11, y: 2 }, { x: 18, y: 6 }],
         walls: [
-          [3,2],[3,3],[3,4],[3,5],[3,6],
-          [6,1],[7,1],[8,1],[9,1],
-          [6,4],[7,4],[8,4],[9,4],[10,4],
-          [12,5],[12,6],[12,7],
-          [6,8],[7,8],[8,8],[9,8]
+          [4,2],[4,3],[4,4],[4,5],[4,6],[4,7],
+          [7,1],[8,1],[9,1],[10,1],[11,1],
+          [8,5],[9,5],[10,5],[11,5],[12,5],[13,5],
+          [16,7],[16,8],[16,9],
+          [7,10],[8,10],[9,10],[10,10],[11,10],
+          [18,2],[18,3],[18,4]
         ],
-        monsters: [{x:5,y:2},{x:11,y:1},{x:10,y:7},{x:13,y:2}]
+        monsters: [{ x: 6, y: 3 }, { x: 13, y: 2 }, { x: 14, y: 10 }, { x: 19, y: 4 }],
+        torches: [{ x: 2, y: 2 }, { x: 13, y: 1 }, { x: 18, y: 8 }],
+        pathTiles: [
+          [1,1],[2,1],[3,1],[4,1],[5,1],[6,1],
+          [6,2],[6,3],[6,4],[6,5],[6,6],
+          [7,6],[8,6],[9,6],[10,6],[11,6],[12,6],[13,6],[14,6],
+          [14,7],[14,8],[14,9],[15,9],[16,9],[17,9],[18,9],[19,9],
+          [19,10],[19,11],[19,12],[20,12]
+        ]
       },
       {
-        start: { x: 1, y: 8 },
-        goal: { x: 14, y: 1 },
-        chests: [{x:3,y:1},{x:5,y:7},{x:10,y:2}],
+        start: { x: 1, y: 12 },
+        goal: { x: 20, y: 1 },
+        chests: [{ x: 3, y: 2 }, { x: 9, y: 11 }, { x: 17, y: 3 }],
         walls: [
-          [2,3],[3,3],[4,3],[5,3],[6,3],
-          [8,1],[8,2],[8,3],[8,4],[8,5],
-          [10,6],[11,6],[12,6],[13,6],
-          [3,6],[4,6],[5,6],[6,6],
-          [12,2],[12,3],[12,4]
+          [3,4],[4,4],[5,4],[6,4],[7,4],[8,4],
+          [10,2],[10,3],[10,4],[10,5],[10,6],[10,7],
+          [13,10],[14,10],[15,10],[16,10],[17,10],
+          [5,8],[6,8],[7,8],[8,8],
+          [15,3],[15,4],[15,5],[15,6],
+          [18,6],[19,6],[20,6]
         ],
-        monsters: [{x:5,y:1},{x:7,y:7},{x:11,y:2},{x:14,y:5},{x:9,y:8}]
+        monsters: [{ x: 6, y: 2 }, { x: 8, y: 10 }, { x: 14, y: 4 }, { x: 19, y: 9 }, { x: 12, y: 11 }],
+        torches: [{ x: 2, y: 1 }, { x: 12, y: 2 }, { x: 19, y: 8 }],
+        pathTiles: [
+          [1,12],[2,12],[3,12],[4,12],[5,12],[6,12],[7,12],
+          [7,11],[7,10],[7,9],[8,9],[9,9],[10,9],[11,9],[12,9],
+          [12,8],[12,7],[12,6],[12,5],
+          [13,5],[14,5],[15,5],[16,5],[17,5],[18,5],
+          [18,4],[18,3],[18,2],[19,2],[20,2],[20,1]
+        ]
       }
     ];
 
@@ -318,13 +355,39 @@
       flashTimer: 0,
       message: '',
       player: { x: 1, y: 1 },
-      goal: { x: 14, y: 8 },
+      goal: { x: 20, y: 12 },
       currentLevel: null,
       monsters: []
     };
 
+    let MAP_WIDTH = COLS * TILE;
+    let MAP_HEIGHT = ROWS * TILE;
+    let OFFSET_X = 0;
+    let OFFSET_Y = 0;
+
+    function resizeCanvasToMap() {
+      MAP_WIDTH = COLS * TILE;
+      MAP_HEIGHT = ROWS * TILE;
+
+      const desiredWidth = MAP_WIDTH + SIDE_MARGIN * 2;
+      const desiredHeight = HUD_HEIGHT + TOP_MARGIN + MAP_HEIGHT + BOTTOM_MARGIN;
+
+      gameCanvas.width = Math.max(BASE_CANVAS_WIDTH, desiredWidth);
+      gameCanvas.height = Math.max(BASE_CANVAS_HEIGHT, desiredHeight);
+
+      OFFSET_X = Math.floor((gameCanvas.width - MAP_WIDTH) / 2);
+      OFFSET_Y = Math.floor(HUD_HEIGHT + TOP_MARGIN + ((gameCanvas.height - HUD_HEIGHT - TOP_MARGIN - BOTTOM_MARGIN - MAP_HEIGHT) / 2));
+    }
+
     function deepCopy(obj) {
       return JSON.parse(JSON.stringify(obj));
+    }
+
+    function tileToPixel(x, y) {
+      return {
+        px: OFFSET_X + x * TILE,
+        py: OFFSET_Y + y * TILE
+      };
     }
 
     function setMessage(msg) {
@@ -374,7 +437,7 @@
       state.cookieCharges = 2;
       state.lives = 3;
       state.invulnerable = 0;
-      setMessage('Pulsa Enter pe sano');
+      setMessage('Pulsa Enter para comenzar');
       updateUI();
     }
 
@@ -475,11 +538,11 @@
         if (monster.cooldown > 0) continue;
 
         const dirs = [
-          {x: 1, y: 0},
-          {x: -1, y: 0},
-          {x: 0, y: 1},
-          {x: 0, y: -1},
-          {x: 0, y: 0}
+          { x: 1, y: 0 },
+          { x: -1, y: 0 },
+          { x: 0, y: 1 },
+          { x: 0, y: -1 },
+          { x: 0, y: 0 }
         ];
 
         for (let i = dirs.length - 1; i > 0; i--) {
@@ -543,36 +606,39 @@
       ctx.fillRect(x, y, w, h);
     }
 
-    function drawMonster(x, y, stunned = false) {
+    function drawMonsterTile(tileX, tileY, stunned = false) {
+      const { px, py } = tileToPixel(tileX, tileY);
+
       const c1 = stunned ? '#9b5de5' : '#24185a';
       const c2 = stunned ? '#c294ff' : '#ef476f';
       const c3 = stunned ? '#f2e8ff' : '#ffffff';
 
-      drawRectPixel(x + 10, y + 14, 28, 22, c1);
-      drawRectPixel(x + 6, y + 18, 6, 12, c1);
-      drawRectPixel(x + 36, y + 18, 6, 12, c1);
-      drawRectPixel(x + 14, y + 16, 8, 8, c3);
-      drawRectPixel(x + 26, y + 16, 8, 8, c3);
-      drawRectPixel(x + 17, y + 19, 4, 4, '#111');
-      drawRectPixel(x + 29, y + 19, 4, 4, '#111');
-      drawRectPixel(x + 16, y + 28, 16, 6, c2);
-      drawRectPixel(x + 19, y + 30, 2, 2, '#111');
-      drawRectPixel(x + 27, y + 30, 2, 2, '#111');
+      drawRectPixel(px + 10, py + 14, 28, 22, c1);
+      drawRectPixel(px + 6, py + 18, 6, 12, c1);
+      drawRectPixel(px + 36, py + 18, 6, 12, c1);
+      drawRectPixel(px + 14, py + 16, 8, 8, c3);
+      drawRectPixel(px + 26, py + 16, 8, 8, c3);
+      drawRectPixel(px + 17, py + 19, 4, 4, '#111');
+      drawRectPixel(px + 29, py + 19, 4, 4, '#111');
+      drawRectPixel(px + 16, py + 28, 16, 6, c2);
+      drawRectPixel(px + 19, py + 30, 2, 2, '#111');
+      drawRectPixel(px + 27, py + 30, 2, 2, '#111');
     }
 
-    function drawChest(x, y) {
-      drawRectPixel(x + 8, y + 18, 32, 18, '#b56c2d');
-      drawRectPixel(x + 8, y + 14, 32, 8, '#e4b144');
-      drawRectPixel(x + 12, y + 16, 24, 3, '#fff1a8');
-      drawRectPixel(x + 21, y + 20, 6, 9, '#5f3b19');
-      drawRectPixel(x + 22, y + 22, 4, 5, '#f4df6b');
+    function drawChestTile(tileX, tileY) {
+      const { px, py } = tileToPixel(tileX, tileY);
+
+      drawRectPixel(px + 8, py + 18, 32, 18, '#b56c2d');
+      drawRectPixel(px + 8, py + 14, 32, 8, '#e4b144');
+      drawRectPixel(px + 12, py + 16, 24, 3, '#fff1a8');
+      drawRectPixel(px + 21, py + 20, 6, 9, '#5f3b19');
+      drawRectPixel(px + 22, py + 22, 4, 5, '#f4df6b');
     }
 
     function drawGrid() {
       for (let y = 0; y < ROWS; y++) {
         for (let x = 0; x < COLS; x++) {
-          const px = x * TILE;
-          const py = y * TILE;
+          const { px, py } = tileToPixel(x, y);
           const alt = (x + y) % 2 === 0;
 
           ctx.fillStyle = alt ? '#1d694e' : '#1c5f4a';
@@ -587,15 +653,10 @@
     }
 
     function drawPath() {
-      const pathTiles = [
-        [1,8],[2,8],[3,8],[4,8],[5,8],[6,8],[7,8],
-        [7,7],[7,6],[7,5],[8,5],[9,5],[10,5],[11,5],[12,5],
-        [12,4],[12,3],[13,3],[14,3],[14,2],[14,1]
-      ];
+      if (!state.currentLevel?.pathTiles) return;
 
-      for (const [x, y] of pathTiles) {
-        const px = x * TILE;
-        const py = y * TILE;
+      for (const [x, y] of state.currentLevel.pathTiles) {
+        const { px, py } = tileToPixel(x, y);
 
         ctx.fillStyle = '#90755c';
         ctx.fillRect(px, py, TILE, TILE);
@@ -608,13 +669,16 @@
 
     function drawNightSky() {
       ctx.fillStyle = '#172352';
-      ctx.fillRect(0, 0, gameCanvas.width, 80);
+      ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+      const moonX = gameCanvas.width - 120;
+      const moonY = 24;
 
       ctx.fillStyle = '#f7f2c4';
-      ctx.fillRect(428, 18, 26, 26);
+      ctx.fillRect(moonX, moonY, 26, 26);
 
       ctx.fillStyle = '#172352';
-      ctx.fillRect(438, 18, 16, 24);
+      ctx.fillRect(moonX + 10, moonY, 16, 24);
 
       const stars = [
         [80,20],[120,42],[180,28],[260,18],[320,38],
@@ -623,32 +687,32 @@
 
       ctx.fillStyle = '#e9f3ff';
       for (const [sx, sy] of stars) {
-        ctx.fillRect(sx, sy, 3, 3);
+        if (sx < gameCanvas.width - 20) {
+          ctx.fillRect(sx, sy, 3, 3);
+        }
       }
     }
 
     function drawTorches() {
-      const points = [{x:2,y:1},{x:10,y:1},{x:14,y:5}];
+      if (!state.currentLevel?.torches) return;
 
-      for (const point of points) {
-        const px = point.x * TILE + 20;
-        const py = point.y * TILE + 2;
+      for (const point of state.currentLevel.torches) {
+        const { px, py } = tileToPixel(point.x, point.y);
 
         ctx.fillStyle = '#4d341c';
-        ctx.fillRect(px, py + 14, 6, 24);
+        ctx.fillRect(px + 20, py + 14, 6, 24);
 
         ctx.fillStyle = '#ffd166';
-        ctx.fillRect(px - 2, py, 10, 14);
+        ctx.fillRect(px + 18, py, 10, 14);
 
         ctx.fillStyle = '#ff8c42';
-        ctx.fillRect(px, py + 2, 6, 10);
+        ctx.fillRect(px + 20, py + 2, 6, 10);
       }
     }
 
     function drawWalls() {
       for (const [wx, wy] of state.currentLevel.walls) {
-        const px = wx * TILE;
-        const py = wy * TILE;
+        const { px, py } = tileToPixel(wx, wy);
 
         ctx.fillStyle = '#344067';
         ctx.fillRect(px, py, TILE, TILE);
@@ -661,48 +725,46 @@
     }
 
     function drawStartGoal() {
-      const sx = state.currentLevel.start.x * TILE;
-      const sy = state.currentLevel.start.y * TILE;
-      const gx = state.goal.x * TILE;
-      const gy = state.goal.y * TILE;
+      const startPos = tileToPixel(state.currentLevel.start.x, state.currentLevel.start.y);
+      const goalPos = tileToPixel(state.goal.x, state.goal.y);
 
       ctx.fillStyle = '#c63f46';
-      ctx.fillRect(sx + 6, sy + 6, 36, 36);
+      ctx.fillRect(startPos.px + 6, startPos.py + 6, 36, 36);
 
       ctx.fillStyle = '#fff8df';
       ctx.font = 'bold 28px Courier New';
-      ctx.fillText('A', sx + 16, sy + 33);
+      ctx.fillText('A', startPos.px + 16, startPos.py + 33);
 
       ctx.fillStyle = '#314d93';
-      ctx.fillRect(gx + 8, gy + 2, 32, 42);
+      ctx.fillRect(goalPos.px + 8, goalPos.py + 2, 32, 42);
 
       ctx.fillStyle = '#2d2a42';
-      ctx.fillRect(gx + 14, gy + 10, 20, 34);
+      ctx.fillRect(goalPos.px + 14, goalPos.py + 10, 20, 34);
 
       ctx.fillStyle = '#ffd166';
       ctx.font = 'bold 26px Courier New';
-      ctx.fillText('B', gx + 17, gy + 35);
+      ctx.fillText('B', goalPos.px + 17, goalPos.py + 35);
     }
 
     function drawTreasuresBar() {
       for (let i = 0; i < REQUIRED_TREASURES; i++) {
         ctx.fillStyle = i < state.treasures ? '#ffd166' : '#4b4f70';
-        ctx.fillRect(16 + i * 20, 12, 14, 14);
+        ctx.fillRect(16 + i * 20, 14, 14, 14);
 
         ctx.fillStyle = i < state.treasures ? '#fff0a6' : '#2e3146';
-        ctx.fillRect(19 + i * 20, 15, 7, 7);
+        ctx.fillRect(19 + i * 20, 17, 7, 7);
       }
     }
 
     function drawHUD() {
       ctx.fillStyle = '#1c214a';
-      ctx.fillRect(0, 0, gameCanvas.width, 48);
+      ctx.fillRect(0, 0, gameCanvas.width, HUD_HEIGHT);
 
       ctx.fillStyle = '#ffd166';
       ctx.font = 'bold 22px Courier New';
-      ctx.fillText('TESOROS: ' + state.treasures + '/' + REQUIRED_TREASURES, 16, 31);
-      ctx.fillText('VIDAS: ' + state.lives, 300, 31);
-      ctx.fillText('RIMAC - NIVEL ' + (state.level + 1), 620, 31);
+      ctx.fillText('TESOROS: ' + state.treasures + '/' + REQUIRED_TREASURES, 16, 34);
+      ctx.fillText('VIDAS: ' + state.lives, 320, 34);
+      ctx.fillText('RIMAC - NIVEL ' + (state.level + 1), gameCanvas.width - 300, 34);
 
       drawTreasuresBar();
     }
@@ -711,22 +773,21 @@
       const blink = state.invulnerable > 0 && Math.floor(state.invulnerable / 6) % 2 === 0;
       if (blink) return;
 
-      const px = state.player.x * TILE + 24;
-      const py = state.player.y * TILE + 26;
+      const { px, py } = tileToPixel(state.player.x, state.player.y);
 
-      ctx.drawImage(yasuoImg, px - 22, py - 30, 46, 46);
-      ctx.drawImage(cookieImg, px + 10, py - 2, 30, 30);
+      ctx.drawImage(yasuoImg, px + 2, py - 2, TILE, TILE);
+      ctx.drawImage(cookieImg, px + TILE * 0.45, py + TILE * 0.22, TILE * 0.55, TILE * 0.55);
     }
 
     function drawChests() {
       for (const chest of state.currentLevel.chests) {
-        drawChest(chest.x * TILE, chest.y * TILE);
+        drawChestTile(chest.x, chest.y);
       }
     }
 
     function drawMonsters() {
       for (const monster of state.monsters) {
-        drawMonster(monster.x * TILE, monster.y * TILE, monster.stunned > 0);
+        drawMonsterTile(monster.x, monster.y, monster.stunned > 0);
       }
     }
 
@@ -743,11 +804,16 @@
       ctx.fillStyle = 'rgba(8, 12, 30, 0.22)';
       ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
+      const boxW = 580;
+      const boxH = 100;
+      const boxX = Math.floor((gameCanvas.width - boxW) / 2);
+      const boxY = 36;
+
       ctx.fillStyle = 'rgba(12, 20, 48, 0.72)';
-      ctx.fillRect(190, 36, 580, 100);
+      ctx.fillRect(boxX, boxY, boxW, boxH);
       ctx.strokeStyle = '#5b74c5';
       ctx.lineWidth = 4;
-      ctx.strokeRect(190, 36, 580, 100);
+      ctx.strokeRect(boxX, boxY, boxW, boxH);
 
       ctx.fillStyle = '#fff8de';
       ctx.textAlign = 'center';
@@ -757,15 +823,20 @@
       ctx.font = 'bold 26px Courier New';
       ctx.fillText('EN RIMAC', gameCanvas.width / 2, 116);
 
+      const promptW = 460;
+      const promptH = 54;
+      const promptX = Math.floor((gameCanvas.width - promptW) / 2);
+      const promptY = gameCanvas.height - 92;
+
       ctx.fillStyle = 'rgba(12, 20, 48, 0.82)';
-      ctx.fillRect(250, 508, 460, 54);
+      ctx.fillRect(promptX, promptY, promptW, promptH);
       ctx.strokeStyle = '#5b74c5';
       ctx.lineWidth = 3;
-      ctx.strokeRect(250, 508, 460, 54);
+      ctx.strokeRect(promptX, promptY, promptW, promptH);
 
       ctx.fillStyle = '#fff8de';
       ctx.font = 'bold 22px Courier New';
-      ctx.fillText('ENTER PARA COMENZAR', gameCanvas.width / 2, 544);
+      ctx.fillText('ENTER PARA COMENZAR', gameCanvas.width / 2, promptY + 36);
 
       ctx.textAlign = 'left';
     }
@@ -774,26 +845,29 @@
       ctx.fillStyle = 'rgba(0,0,0,0.55)';
       ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
+      const boxW = 520;
+      const boxH = 150;
+      const boxX = Math.floor((gameCanvas.width - boxW) / 2);
+      const boxY = Math.floor((gameCanvas.height - boxH) / 2);
+
       ctx.fillStyle = '#263f7a';
-      ctx.fillRect(220, 200, 520, 150);
+      ctx.fillRect(boxX, boxY, boxW, boxH);
 
       ctx.strokeStyle = '#5d78c9';
       ctx.lineWidth = 4;
-      ctx.strokeRect(220, 200, 520, 150);
+      ctx.strokeRect(boxX, boxY, boxW, boxH);
 
       ctx.fillStyle = title.includes('Victoria') ? '#8fd36d' : '#ef476f';
       ctx.font = 'bold 34px Courier New';
-      ctx.fillText(title, 310, 255);
+      ctx.fillText(title, boxX + 90, boxY + 55);
 
       ctx.fillStyle = '#fff8de';
       ctx.font = 'bold 20px Courier New';
-      ctx.fillText(subtitle, 275, 302);
+      ctx.fillText(subtitle, boxX + 55, boxY + 102);
     }
 
     function drawPlayingScene() {
       ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
-      ctx.fillStyle = '#153057';
-      ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
       drawNightSky();
       drawGrid();
@@ -866,6 +940,7 @@
     startBtn.addEventListener('click', startGame);
     restartBtn.addEventListener('click', restartGame);
 
+    resizeCanvasToMap();
     restartGame();
     requestAnimationFrame(loop);
   </script>

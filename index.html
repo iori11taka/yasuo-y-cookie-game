@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -228,7 +228,7 @@
       <canvas id="gameCanvas"></canvas>
 
       <div class="footer-note">
-        Pendiente agregar chamos, policias y carros en movimiento en nivel 3
+        Pendiente agregar reglas de juego space para usar a cookie y cuidado con los chamos
       </div>
     </main>
   </div>
@@ -244,17 +244,17 @@
     const cookieImg = new Image();
     cookieImg.src = "imagenes/cookie.png";
 
-const fondoInicio = new Image();
-fondoInicio.src = "imagenes/rimacfondo1.png";
+    const fondoInicio = new Image();
+    fondoInicio.src = "imagenes/rimacfondo1.png";
 
-const gameFondo = new Image();
-gameFondo.src = "imagenes/gamefondo.png";
+    const gameFondo = new Image();
+    gameFondo.src = "imagenes/gamefondo.png";
 
-const gameFondo2 = new Image();
-gameFondo2.src = "imagenes/gamefondo2.png";
+    const gameFondo2 = new Image();
+    gameFondo2.src = "imagenes/gamefondo2.png";
 
-const gameFondo3 = new Image();
-gameFondo3.src = "imagenes/gamefondo3.png";
+    const gameFondo3 = new Image();
+    gameFondo3.src = "imagenes/gamefondo3.png";
 
     const treasuresUI = document.getElementById('treasuresUI');
     const levelUI = document.getElementById('levelUI');
@@ -285,7 +285,7 @@ gameFondo3.src = "imagenes/gamefondo3.png";
     };
 
     const levels = [
- {
+      {
         start: { x: 1, y: 12 },
         goal: { x: 20, y: 1 },
         chests: [{ x: 4, y: 2 }, { x: 10, y: 6 }, { x: 18, y: 10 }],
@@ -298,27 +298,34 @@ gameFondo3.src = "imagenes/gamefondo3.png";
           [8,4],[9,4],[10,4],[11,4],
           [18,4],[18,5],[18,6]
         ],
-        monsters: [{ x: 7, y: 2 }, { x: 12, y: 6 }, { x: 17, y: 9 }]
+        monsters: [
+          { x: 7, y: 2 },
+          { x: 12, y: 6 },
+          { x: 17, y: 9 }
+        ]
       },
-{
-  start: { x: 1, y: 11 },
-  goal: { x: 0, y: 0 },
-  chests: [{ x: 6, y: 2 }, { x: 10, y: 11 }, { x: 18, y: 10 }],
-  walls: [
-    // lado izquierdo del río
-    [0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[11,5],
-    [0,6],[1,6],[2,6],[3,6],[4,6],[5,6],[6,6],[7,6],[8,6],[9,6],[10,6],[11,6],
-    [0,7],[1,7],[2,7],[3,7],[4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],
-    [0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,8],[7,8],[8,8],[9,8],[10,8],[11,8],
+      {
+        start: { x: 1, y: 11 },
+        goal: { x: 0, y: 0 },
+        chests: [{ x: 6, y: 2 }, { x: 10, y: 11 }, { x: 18, y: 10 }],
+        walls: [
+          [0,5],[1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[9,5],[10,5],[11,5],
+          [0,6],[1,6],[2,6],[3,6],[4,6],[5,6],[6,6],[7,6],[8,6],[9,6],[10,6],[11,6],
+          [0,7],[1,7],[2,7],[3,7],[4,7],[5,7],[6,7],[7,7],[8,7],[9,7],[10,7],[11,7],
+          [0,8],[1,8],[2,8],[3,8],[4,8],[5,8],[6,8],[7,8],[8,8],[9,8],[10,8],[11,8],
 
-    // lado derecho del río
-    [14,5],[15,5],[16,5],[17,5],[18,5],[19,5],[20,5],[21,5],
-    [14,6],[15,6],[16,6],[17,6],[18,6],[19,6],[20,6],[21,6],
-    [14,7],[15,7],[16,7],[17,7],[18,7],[19,7],[20,7],[21,7],
-    [14,8],[15,8],[16,8],[17,8],[18,8],[19,8],[20,8],[21,8]
-  ],
-  monsters: [{ x: 7, y: 3 }, { x: 10, y: 10 }, { x: 16, y: 9 }, { x: 18, y: 4 }]
-},
+          [14,5],[15,5],[16,5],[17,5],[18,5],[19,5],[20,5],[21,5],
+          [14,6],[15,6],[16,6],[17,6],[18,6],[19,6],[20,6],[21,6],
+          [14,7],[15,7],[16,7],[17,7],[18,7],[19,7],[20,7],[21,7],
+          [14,8],[15,8],[16,8],[17,8],[18,8],[19,8],[20,8],[21,8]
+        ],
+        monsters: [
+          { x: 7, y: 3 },
+          { x: 10, y: 10 },
+          { x: 16, y: 9 },
+          { x: 18, y: 4 }
+        ]
+      },
       {
         start: { x: 1, y: 12 },
         goal: { x: 20, y: 1 },
@@ -331,7 +338,13 @@ gameFondo3.src = "imagenes/gamefondo3.png";
           [15,3],[15,4],[15,5],[15,6],
           [18,6],[19,6],[20,6]
         ],
-        monsters: [{ x: 6, y: 2 }, { x: 8, y: 10 }, { x: 14, y: 4 }, { x: 19, y: 9 }, { x: 12, y: 11 }]
+        monsters: [
+          { x: 6, y: 2, type: 'cap' },
+          { x: 8, y: 10, type: 'cap' },
+          { x: 14, y: 4, type: 'cap' },
+          { x: 19, y: 9, type: 'cap' },
+          { x: 12, y: 11, type: 'cap' }
+        ]
       }
     ];
 
@@ -367,7 +380,10 @@ gameFondo3.src = "imagenes/gamefondo3.png";
       gameCanvas.height = Math.max(BASE_CANVAS_HEIGHT, desiredHeight);
 
       OFFSET_X = Math.floor((gameCanvas.width - MAP_WIDTH) / 2);
-      OFFSET_Y = Math.floor(HUD_HEIGHT + TOP_MARGIN + ((gameCanvas.height - HUD_HEIGHT - TOP_MARGIN - BOTTOM_MARGIN - MAP_HEIGHT) / 2));
+      OFFSET_Y = Math.floor(
+        HUD_HEIGHT + TOP_MARGIN +
+        ((gameCanvas.height - HUD_HEIGHT - TOP_MARGIN - BOTTOM_MARGIN - MAP_HEIGHT) / 2)
+      );
     }
 
     function deepCopy(obj) {
@@ -406,8 +422,10 @@ gameFondo3.src = "imagenes/gamefondo3.png";
       state.monsters = lvl.monsters.map(m => ({
         x: m.x,
         y: m.y,
+        type: m.type || 'normal',
         stunned: 0,
-        cooldown: Math.random() * 16
+        cooldown: Math.random() * 16,
+        chasing: false
       }));
       updateUI();
     }
@@ -438,6 +456,10 @@ gameFondo3.src = "imagenes/gamefondo3.png";
 
     function occupiedByMonster(x, y, ignored = null) {
       return state.monsters.some(m => m !== ignored && m.x === x && m.y === y);
+    }
+
+    function distanceToPlayer(x, y) {
+      return Math.abs(x - state.player.x) + Math.abs(y - state.player.y);
     }
 
     function collectChestIfPresent() {
@@ -504,6 +526,7 @@ gameFondo3.src = "imagenes/gamefondo3.png";
         const d = Math.abs(monster.x - state.player.x) + Math.abs(monster.y - state.player.y);
         if (d <= 2) {
           monster.stunned = 140;
+          monster.chasing = false;
           affected += 1;
         }
       }
@@ -522,23 +545,53 @@ gameFondo3.src = "imagenes/gamefondo3.png";
       for (const monster of state.monsters) {
         if (monster.stunned > 0) {
           monster.stunned -= 1;
+          monster.chasing = false;
           continue;
         }
 
         monster.cooldown -= delta;
         if (monster.cooldown > 0) continue;
 
-        const dirs = [
-          { x: 1, y: 0 },
-          { x: -1, y: 0 },
-          { x: 0, y: 1 },
-          { x: 0, y: -1 },
-          { x: 0, y: 0 }
-        ];
+        const dist = distanceToPlayer(monster.x, monster.y);
 
-        for (let i = dirs.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [dirs[i], dirs[j]] = [dirs[j], dirs[i]];
+        if (monster.type === 'cap' && dist <= 1) {
+          monster.chasing = true;
+        } else if (monster.type === 'cap' && dist > 1) {
+          monster.chasing = false;
+        }
+
+        let dirs = [];
+
+        if (monster.type === 'cap' && monster.chasing) {
+          const dx = state.player.x - monster.x;
+          const dy = state.player.y - monster.y;
+
+          if (Math.abs(dx) > Math.abs(dy)) {
+            dirs = [
+              { x: Math.sign(dx), y: 0 },
+              { x: 0, y: Math.sign(dy) },
+              { x: 0, y: 0 }
+            ];
+          } else {
+            dirs = [
+              { x: 0, y: Math.sign(dy) },
+              { x: Math.sign(dx), y: 0 },
+              { x: 0, y: 0 }
+            ];
+          }
+        } else {
+          dirs = [
+            { x: 1, y: 0 },
+            { x: -1, y: 0 },
+            { x: 0, y: 1 },
+            { x: 0, y: -1 },
+            { x: 0, y: 0 }
+          ];
+
+          for (let i = dirs.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [dirs[i], dirs[j]] = [dirs[j], dirs[i]];
+          }
         }
 
         let moved = false;
@@ -563,7 +616,9 @@ gameFondo3.src = "imagenes/gamefondo3.png";
           }
         }
 
-        monster.cooldown = moved ? (8 + Math.random() * 16) : (5 + Math.random() * 8);
+        monster.cooldown = moved
+          ? (monster.chasing ? 6 : 8 + Math.random() * 16)
+          : (5 + Math.random() * 8);
       }
     }
 
@@ -596,171 +651,209 @@ gameFondo3.src = "imagenes/gamefondo3.png";
       ctx.fillStyle = color;
       ctx.fillRect(x, y, w, h);
     }
+
     function drawCarObstacle(px, py) {
-  drawRectPixel(px + 4, py + 14, 37, 18, '#274690');
-  drawRectPixel(px + 10, py + 10, 24, 10, '#3b5dc9');
-  drawRectPixel(px + 14, py + 12, 6, 5, '#a9d6ff');
-  drawRectPixel(px + 24, py + 12, 6, 5, '#a9d6ff');
-  drawRectPixel(px + 7, py + 30, 8, 8, '#1b1b1b');
-  drawRectPixel(px + 30, py + 30, 8, 8, '#1b1b1b');
-  drawRectPixel(px + 8, py + 31, 4, 4, '#8c8c8c');
-  drawRectPixel(px + 31, py + 31, 4, 4, '#8c8c8c');
-}
-
-function drawBarricadeObstacle(px, py) {
-  drawRectPixel(px + 5, py + 24, 35, 10, '#d08b3e');
-  drawRectPixel(px + 8, py + 14, 5, 24, '#6b4f2a');
-  drawRectPixel(px + 32, py + 14, 5, 24, '#6b4f2a');
-
-  drawRectPixel(px + 8, py + 25, 7, 3, '#fff2b2');
-  drawRectPixel(px + 16, py + 25, 7, 3, '#c94f3d');
-  drawRectPixel(px + 24, py + 25, 7, 3, '#fff2b2');
-  drawRectPixel(px + 32, py + 25, 5, 3, '#c94f3d');
-}
-
-function drawFenceObstacle(px, py) {
-  drawRectPixel(px + 4, py + 28, 37, 4, '#1f1f1f');
-
-  for (let i = 0; i < 5; i++) {
-    drawRectPixel(px + 6 + i * 8, py + 12, 4, 20, '#2e2e2e');
-    drawRectPixel(px + 5 + i * 8, py + 10, 6, 3, '#ffd166');
-  }
-
-  drawRectPixel(px + 4, py + 16, 37, 3, '#444');
-}
-
-function drawConeObstacle(px, py) {
-  drawRectPixel(px + 16, py + 10, 12, 6, '#ff9f1c');
-  drawRectPixel(px + 13, py + 16, 18, 10, '#ff7b00');
-  drawRectPixel(px + 10, py + 26, 24, 9, '#e36414');
-  drawRectPixel(px + 12, py + 20, 20, 3, '#fff4cc');
-  drawRectPixel(px + 8, py + 35, 28, 4, '#6c757d');
-}
-
-function drawBushObstacle(px, py) {
-  drawRectPixel(px + 8, py + 16, 28, 18, '#2f6f3e');
-  drawRectPixel(px + 4, py + 22, 10, 10, '#3f8f4f');
-  drawRectPixel(px + 30, py + 20, 10, 10, '#3f8f4f');
-  drawRectPixel(px + 14, py + 10, 16, 10, '#4fa85f');
-  drawRectPixel(px + 18, py + 18, 4, 4, '#7dd87d');
-  drawRectPixel(px + 25, py + 24, 4, 4, '#7dd87d');
-}
-
-function drawMonsterTile(tileX, tileY, stunned = false) {
-  const { px, py } = tileToPixel(tileX, tileY);
-
-  const c1 = stunned ? '#7b4ce2' : '#2b1d6b';
-  const c2 = stunned ? '#d2b7ff' : '#ff4d6d';
-  const c3 = '#ffffff';
-
-  drawRectPixel(px + 8, py + 12, 30, 22, '#0f1020');
-  drawRectPixel(px + 10, py + 14, 26, 18, c1);
-  drawRectPixel(px + 6, py + 18, 6, 10, c1);
-  drawRectPixel(px + 34, py + 18, 6, 10, c1);
-
-  drawRectPixel(px + 14, py + 16, 7, 7, c3);
-  drawRectPixel(px + 25, py + 16, 7, 7, c3);
-  drawRectPixel(px + 16, py + 18, 3, 3, '#111');
-  drawRectPixel(px + 27, py + 18, 3, 3, '#111');
-
-  drawRectPixel(px + 16, py + 27, 14, 5, c2);
-  drawRectPixel(px + 19, py + 28, 2, 2, '#111');
-  drawRectPixel(px + 25, py + 28, 2, 2, '#111');
-}
-
-function drawChestTile(tileX, tileY) {
-  const { px, py } = tileToPixel(tileX, tileY);
-
-  const pulse = Math.sin(Date.now() * 0.008 + tileX * 2 + tileY) * 2;
-  const glowY = py + 8 + pulse;
-
-  ctx.fillStyle = 'rgba(255, 215, 90, 0.22)';
-  ctx.fillRect(px + 3, glowY, 39, 28);
-
-  ctx.fillStyle = 'rgba(255, 245, 180, 0.18)';
-  ctx.fillRect(px + 8, glowY - 4, 28, 20);
-
-  drawRectPixel(px + 10, py + 34 + pulse, 26, 4, '#4e2f16');
-
-  drawRectPixel(px + 8, py + 17 + pulse, 30, 18, '#9f541d');
-  drawRectPixel(px + 8, py + 12 + pulse, 30, 8, '#f2b63f');
-
-  drawRectPixel(px + 12, py + 14 + pulse, 22, 3, '#fff3ae');
-  drawRectPixel(px + 21, py + 19 + pulse, 5, 10, '#5a3a18');
-  drawRectPixel(px + 20, py + 21 + pulse, 7, 6, '#ffe36c');
-
-  drawRectPixel(px + 6, py + 14 + pulse, 2, 19, '#fff8cd');
-  drawRectPixel(px + 38, py + 14 + pulse, 2, 19, '#c97f22');
-
-  drawRectPixel(px + 13, py + 9 + pulse, 3, 3, '#fffce1');
-  drawRectPixel(px + 31, py + 11 + pulse, 3, 3, '#fffce1');
-  drawRectPixel(px + 28, py + 7 + pulse, 2, 2, '#fffce1');
-
-  drawRectPixel(px + 5, py + 16 + pulse, 1, 16, '#fffde8');
-  drawRectPixel(px + 40, py + 16 + pulse, 1, 16, '#7a4516');
-}
-
-function drawMapBackground() {
-  let fondoActual = gameFondo;
-
-  if (state.level === 1) {
-    fondoActual = gameFondo2;
-  } else if (state.level === 2) {
-    fondoActual = gameFondo3;
-  }
-
-  if (fondoActual.complete && fondoActual.naturalWidth > 0) {
-    ctx.drawImage(fondoActual, OFFSET_X, OFFSET_Y, MAP_WIDTH, MAP_HEIGHT);
-  } else {
-    ctx.fillStyle = '#243b55';
-    ctx.fillRect(OFFSET_X, OFFSET_Y, MAP_WIDTH, MAP_HEIGHT);
-  }
-
-  ctx.fillStyle = 'rgba(10, 14, 30, 0.08)';
-  ctx.fillRect(OFFSET_X, OFFSET_Y, MAP_WIDTH, MAP_HEIGHT);
-}
-
-function drawWalls() {
-  for (const [wx, wy] of state.currentLevel.walls) {
-    if (state.level === 1) {
-      continue;
+      drawRectPixel(px + 4, py + 14, 37, 18, '#274690');
+      drawRectPixel(px + 10, py + 10, 24, 10, '#3b5dc9');
+      drawRectPixel(px + 14, py + 12, 6, 5, '#a9d6ff');
+      drawRectPixel(px + 24, py + 12, 6, 5, '#a9d6ff');
+      drawRectPixel(px + 7, py + 30, 8, 8, '#1b1b1b');
+      drawRectPixel(px + 30, py + 30, 8, 8, '#1b1b1b');
+      drawRectPixel(px + 8, py + 31, 4, 4, '#8c8c8c');
+      drawRectPixel(px + 31, py + 31, 4, 4, '#8c8c8c');
     }
 
-    const { px, py } = tileToPixel(wx, wy);
-    const typeSeed = (wx * 7 + wy * 13) % 5;
+    function drawBarricadeObstacle(px, py) {
+      drawRectPixel(px + 5, py + 24, 35, 10, '#d08b3e');
+      drawRectPixel(px + 8, py + 14, 5, 24, '#6b4f2a');
+      drawRectPixel(px + 32, py + 14, 5, 24, '#6b4f2a');
 
-    if (typeSeed === 0) {
-      drawCarObstacle(px, py);
-    } else if (typeSeed === 1) {
-      drawBarricadeObstacle(px, py);
-    } else if (typeSeed === 2) {
-      drawFenceObstacle(px, py);
-    } else if (typeSeed === 3) {
-      drawConeObstacle(px, py);
-    } else {
-      drawBushObstacle(px, py);
+      drawRectPixel(px + 8, py + 25, 7, 3, '#fff2b2');
+      drawRectPixel(px + 16, py + 25, 7, 3, '#c94f3d');
+      drawRectPixel(px + 24, py + 25, 7, 3, '#fff2b2');
+      drawRectPixel(px + 32, py + 25, 5, 3, '#c94f3d');
     }
-  }
-}
 
-function drawStartGoal() {
-  const startPos = tileToPixel(state.currentLevel.start.x, state.currentLevel.start.y);
-  const goalPos = tileToPixel(state.goal.x, state.goal.y);
+    function drawFenceObstacle(px, py) {
+      drawRectPixel(px + 4, py + 28, 37, 4, '#1f1f1f');
 
-  drawRectPixel(startPos.px + 5, startPos.py + 6, 35, 35, '#6b3f1f');
-  drawRectPixel(startPos.px + 9, startPos.py + 10, 27, 27, '#b07d3c');
-  drawRectPixel(startPos.px + 16, startPos.py + 16, 13, 13, '#fff0b3');
-  ctx.fillStyle = '#3b240f';
-  ctx.font = 'bold 24px Courier New';
-  ctx.fillText('A', startPos.px + 15, startPos.py + 32);
+      for (let i = 0; i < 5; i++) {
+        drawRectPixel(px + 6 + i * 8, py + 12, 4, 20, '#2e2e2e');
+        drawRectPixel(px + 5 + i * 8, py + 10, 6, 3, '#ffd166');
+      }
 
-  drawRectPixel(goalPos.px + 8, goalPos.py + 2, 30, 40, '#213a7a');
-  drawRectPixel(goalPos.px + 12, goalPos.py + 6, 22, 32, '#2f57b7');
-  drawRectPixel(goalPos.px + 16, goalPos.py + 10, 14, 24, '#fff0a8');
-  ctx.fillStyle = '#1b2550';
-  ctx.font = 'bold 24px Courier New';
-  ctx.fillText('B', goalPos.px + 16, goalPos.py + 31);
-}
+      drawRectPixel(px + 4, py + 16, 37, 3, '#444');
+    }
+
+    function drawConeObstacle(px, py) {
+      drawRectPixel(px + 16, py + 10, 12, 6, '#ff9f1c');
+      drawRectPixel(px + 13, py + 16, 18, 10, '#ff7b00');
+      drawRectPixel(px + 10, py + 26, 24, 9, '#e36414');
+      drawRectPixel(px + 12, py + 20, 20, 3, '#fff4cc');
+      drawRectPixel(px + 8, py + 35, 28, 4, '#6c757d');
+    }
+
+    function drawBushObstacle(px, py) {
+      drawRectPixel(px + 8, py + 16, 28, 18, '#2f6f3e');
+      drawRectPixel(px + 4, py + 22, 10, 10, '#3f8f4f');
+      drawRectPixel(px + 30, py + 20, 10, 10, '#3f8f4f');
+      drawRectPixel(px + 14, py + 10, 16, 10, '#4fa85f');
+      drawRectPixel(px + 18, py + 18, 4, 4, '#7dd87d');
+      drawRectPixel(px + 25, py + 24, 4, 4, '#7dd87d');
+    }
+
+    function drawMonsterTile(tileX, tileY, stunned = false) {
+      const { px, py } = tileToPixel(tileX, tileY);
+
+      const c1 = stunned ? '#7b4ce2' : '#2b1d6b';
+      const c2 = stunned ? '#d2b7ff' : '#ff4d6d';
+      const c3 = '#ffffff';
+
+      drawRectPixel(px + 8, py + 12, 30, 22, '#0f1020');
+      drawRectPixel(px + 10, py + 14, 26, 18, c1);
+      drawRectPixel(px + 6, py + 18, 6, 10, c1);
+      drawRectPixel(px + 34, py + 18, 6, 10, c1);
+
+      drawRectPixel(px + 14, py + 16, 7, 7, c3);
+      drawRectPixel(px + 25, py + 16, 7, 7, c3);
+      drawRectPixel(px + 16, py + 18, 3, 3, '#111');
+      drawRectPixel(px + 27, py + 18, 3, 3, '#111');
+
+      drawRectPixel(px + 16, py + 27, 14, 5, c2);
+      drawRectPixel(px + 19, py + 28, 2, 2, '#111');
+      drawRectPixel(px + 25, py + 28, 2, 2, '#111');
+    }
+
+    function drawCapMonsterTile(tileX, tileY, stunned = false) {
+      const { px, py } = tileToPixel(tileX, tileY);
+
+      const skin = stunned ? '#caa27c' : '#f1c27d';
+      const hair = stunned ? '#5b4b8a' : '#1b1b1b';
+      const shirtBlue = stunned ? '#6e7fd1' : '#1d3fa6';
+      const shirtRed = stunned ? '#e07a8d' : '#d7263d';
+      const capYellow = stunned ? '#d8c56d' : '#f4d000';
+      const capBlue = stunned ? '#6e7fd1' : '#1d3fa6';
+      const capRed = stunned ? '#d97b8b' : '#d7263d';
+      const white = '#ffffff';
+      const black = '#111111';
+
+      drawRectPixel(px + 10, py + 7, 22, 4, capRed);
+      drawRectPixel(px + 14, py + 11, 14, 2, capRed);
+
+      drawRectPixel(px + 10, py + 11, 26, 4, capYellow);
+      drawRectPixel(px + 10, py + 15, 26, 4, capBlue);
+      drawRectPixel(px + 14, py + 16, 2, 2, white);
+      drawRectPixel(px + 20, py + 16, 2, 2, white);
+      drawRectPixel(px + 26, py + 16, 2, 2, white);
+      drawRectPixel(px + 10, py + 19, 26, 3, capRed);
+
+      drawRectPixel(px + 12, py + 22, 22, 14, skin);
+      drawRectPixel(px + 12, py + 22, 22, 4, hair);
+
+      drawRectPixel(px + 17, py + 27, 3, 3, white);
+      drawRectPixel(px + 26, py + 27, 3, 3, white);
+      drawRectPixel(px + 18, py + 28, 1, 1, black);
+      drawRectPixel(px + 27, py + 28, 1, 1, black);
+
+      drawRectPixel(px + 20, py + 32, 6, 2, '#a33');
+
+      drawRectPixel(px + 13, py + 36, 20, 6, shirtBlue);
+      drawRectPixel(px + 13, py + 42, 20, 3, shirtRed);
+    }
+
+    function drawChestTile(tileX, tileY) {
+      const { px, py } = tileToPixel(tileX, tileY);
+
+      const pulse = Math.sin(Date.now() * 0.008 + tileX * 2 + tileY) * 2;
+      const glowY = py + 8 + pulse;
+
+      ctx.fillStyle = 'rgba(255, 215, 90, 0.22)';
+      ctx.fillRect(px + 3, glowY, 39, 28);
+
+      ctx.fillStyle = 'rgba(255, 245, 180, 0.18)';
+      ctx.fillRect(px + 8, glowY - 4, 28, 20);
+
+      drawRectPixel(px + 10, py + 34 + pulse, 26, 4, '#4e2f16');
+
+      drawRectPixel(px + 8, py + 17 + pulse, 30, 18, '#9f541d');
+      drawRectPixel(px + 8, py + 12 + pulse, 30, 8, '#f2b63f');
+
+      drawRectPixel(px + 12, py + 14 + pulse, 22, 3, '#fff3ae');
+      drawRectPixel(px + 21, py + 19 + pulse, 5, 10, '#5a3a18');
+      drawRectPixel(px + 20, py + 21 + pulse, 7, 6, '#ffe36c');
+
+      drawRectPixel(px + 6, py + 14 + pulse, 2, 19, '#fff8cd');
+      drawRectPixel(px + 38, py + 14 + pulse, 2, 19, '#c97f22');
+
+      drawRectPixel(px + 13, py + 9 + pulse, 3, 3, '#fffce1');
+      drawRectPixel(px + 31, py + 11 + pulse, 3, 3, '#fffce1');
+      drawRectPixel(px + 28, py + 7 + pulse, 2, 2, '#fffce1');
+
+      drawRectPixel(px + 5, py + 16 + pulse, 1, 16, '#fffde8');
+      drawRectPixel(px + 40, py + 16 + pulse, 1, 16, '#7a4516');
+    }
+
+    function drawMapBackground() {
+      let fondoActual = gameFondo;
+
+      if (state.level === 1) {
+        fondoActual = gameFondo2;
+      } else if (state.level === 2) {
+        fondoActual = gameFondo3;
+      }
+
+      if (fondoActual.complete && fondoActual.naturalWidth > 0) {
+        ctx.drawImage(fondoActual, OFFSET_X, OFFSET_Y, MAP_WIDTH, MAP_HEIGHT);
+      } else {
+        ctx.fillStyle = '#243b55';
+        ctx.fillRect(OFFSET_X, OFFSET_Y, MAP_WIDTH, MAP_HEIGHT);
+      }
+
+      ctx.fillStyle = 'rgba(10, 14, 30, 0.08)';
+      ctx.fillRect(OFFSET_X, OFFSET_Y, MAP_WIDTH, MAP_HEIGHT);
+    }
+
+    function drawWalls() {
+      for (const [wx, wy] of state.currentLevel.walls) {
+        if (state.level === 1) {
+          continue;
+        }
+
+        const { px, py } = tileToPixel(wx, wy);
+        const typeSeed = (wx * 7 + wy * 13) % 5;
+
+        if (typeSeed === 0) {
+          drawCarObstacle(px, py);
+        } else if (typeSeed === 1) {
+          drawBarricadeObstacle(px, py);
+        } else if (typeSeed === 2) {
+          drawFenceObstacle(px, py);
+        } else if (typeSeed === 3) {
+          drawConeObstacle(px, py);
+        } else {
+          drawBushObstacle(px, py);
+        }
+      }
+    }
+
+    function drawStartGoal() {
+      const startPos = tileToPixel(state.currentLevel.start.x, state.currentLevel.start.y);
+      const goalPos = tileToPixel(state.goal.x, state.goal.y);
+
+      drawRectPixel(startPos.px + 5, startPos.py + 6, 35, 35, '#6b3f1f');
+      drawRectPixel(startPos.px + 9, startPos.py + 10, 27, 27, '#b07d3c');
+      drawRectPixel(startPos.px + 16, startPos.py + 16, 13, 13, '#fff0b3');
+      ctx.fillStyle = '#3b240f';
+      ctx.font = 'bold 24px Courier New';
+      ctx.fillText('A', startPos.px + 15, startPos.py + 32);
+
+      drawRectPixel(goalPos.px + 8, goalPos.py + 2, 30, 40, '#213a7a');
+      drawRectPixel(goalPos.px + 12, goalPos.py + 6, 22, 32, '#2f57b7');
+      drawRectPixel(goalPos.px + 16, goalPos.py + 10, 14, 24, '#fff0a8');
+      ctx.fillStyle = '#1b2550';
+      ctx.font = 'bold 24px Courier New';
+      ctx.fillText('B', goalPos.px + 16, goalPos.py + 31);
+    }
 
     function drawTreasuresBar() {
       for (let i = 0; i < REQUIRED_TREASURES; i++) {
@@ -785,177 +878,181 @@ function drawStartGoal() {
       drawTreasuresBar();
     }
 
-function drawPlayer() {
-  const blink = state.invulnerable > 0 && Math.floor(state.invulnerable / 6) % 2 === 0;
-  if (blink) return;
+    function drawPlayer() {
+      const blink = state.invulnerable > 0 && Math.floor(state.invulnerable / 6) % 2 === 0;
+      if (blink) return;
 
-  const { px, py } = tileToPixel(state.player.x, state.player.y);
+      const { px, py } = tileToPixel(state.player.x, state.player.y);
 
-  ctx.drawImage(yasuoImg, px - 2, py - 8, TILE * 1.15, TILE * 1.15);
-  ctx.drawImage(cookieImg, px + TILE * 0.38, py + TILE * 0.28, TILE * 0.58, TILE * 0.58);
-}
-
-    function drawChests() {
-      for (const chest of state.currentLevel.chests) {
-        drawChestTile(chest.x, chest.y);
-      }
+      ctx.drawImage(yasuoImg, px - 2, py - 8, TILE * 1.15, TILE * 1.15);
+      ctx.drawImage(cookieImg, px + TILE * 0.38, py + TILE * 0.28, TILE * 0.58, TILE * 0.58);
     }
 
-    function drawMonsters() {
-      for (const monster of state.monsters) {
+function drawChests() {
+  for (const chest of state.currentLevel.chests) {
+    drawChestTile(chest.x, chest.y);
+  }
+}
+
+  function drawMonsters() {
+    for (const monster of state.monsters) {
+      if (monster.type === 'cap') {
+        drawCapMonsterTile(monster.x, monster.y, monster.stunned > 0);
+      } else {
         drawMonsterTile(monster.x, monster.y, monster.stunned > 0);
       }
     }
+  }
 
-    function drawTitleScreen() {
-      ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+  function drawTitleScreen() {
+    ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-      if (fondoInicio.complete && fondoInicio.naturalWidth > 0) {
-        ctx.drawImage(fondoInicio, 0, 0, gameCanvas.width, gameCanvas.height);
-      } else {
-        ctx.fillStyle = '#172352';
-        ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-      }
-
-      ctx.fillStyle = 'rgba(8, 12, 30, 0.22)';
+    if (fondoInicio.complete && fondoInicio.naturalWidth > 0) {
+      ctx.drawImage(fondoInicio, 0, 0, gameCanvas.width, gameCanvas.height);
+    } else {
+      ctx.fillStyle = '#172352';
       ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
-
-      const boxW = 580;
-      const boxH = 100;
-      const boxX = Math.floor((gameCanvas.width - boxW) / 2);
-      const boxY = 36;
-
-      ctx.fillStyle = 'rgba(12, 20, 48, 0.72)';
-      ctx.fillRect(boxX, boxY, boxW, boxH);
-      ctx.strokeStyle = '#5b74c5';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(boxX, boxY, boxW, boxH);
-
-      ctx.fillStyle = '#fff8de';
-      ctx.textAlign = 'center';
-      ctx.font = 'bold 42px Courier New';
-      ctx.fillText('YASUO & COOKIE', gameCanvas.width / 2, 82);
-
-      ctx.font = 'bold 26px Courier New';
-      ctx.fillText('EN RIMAC', gameCanvas.width / 2, 116);
-
-      const promptW = 460;
-      const promptH = 54;
-      const promptX = Math.floor((gameCanvas.width - promptW) / 2);
-      const promptY = gameCanvas.height - 92;
-
-      ctx.fillStyle = 'rgba(12, 20, 48, 0.82)';
-      ctx.fillRect(promptX, promptY, promptW, promptH);
-      ctx.strokeStyle = '#5b74c5';
-      ctx.lineWidth = 3;
-      ctx.strokeRect(promptX, promptY, promptW, promptH);
-
-      ctx.fillStyle = '#fff8de';
-      ctx.font = 'bold 22px Courier New';
-      ctx.fillText('ENTER PARA COMENZAR', gameCanvas.width / 2, promptY + 36);
-
-      ctx.textAlign = 'left';
     }
 
-    function drawEndOverlay(title, subtitle) {
-      ctx.fillStyle = 'rgba(0,0,0,0.55)';
-      ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+    ctx.fillStyle = 'rgba(8, 12, 30, 0.22)';
+    ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
 
-      const boxW = 520;
-      const boxH = 150;
-      const boxX = Math.floor((gameCanvas.width - boxW) / 2);
-      const boxY = Math.floor((gameCanvas.height - boxH) / 2);
+    const boxW = 580;
+    const boxH = 100;
+    const boxX = Math.floor((gameCanvas.width - boxW) / 2);
+    const boxY = 36;
 
-      ctx.fillStyle = '#263f7a';
-      ctx.fillRect(boxX, boxY, boxW, boxH);
+    ctx.fillStyle = 'rgba(12, 20, 48, 0.72)';
+    ctx.fillRect(boxX, boxY, boxW, boxH);
+    ctx.strokeStyle = '#5b74c5';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(boxX, boxY, boxW, boxH);
 
-      ctx.strokeStyle = '#5d78c9';
-      ctx.lineWidth = 4;
-      ctx.strokeRect(boxX, boxY, boxW, boxH);
+    ctx.fillStyle = '#fff8de';
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 42px Courier New';
+    ctx.fillText('YASUO & COOKIE', gameCanvas.width / 2, 82);
 
-      ctx.fillStyle = title.includes('Victoria') ? '#8fd36d' : '#ef476f';
-      ctx.font = 'bold 34px Courier New';
-      ctx.fillText(title, boxX + 90, boxY + 55);
+    ctx.font = 'bold 26px Courier New';
+    ctx.fillText('EN RIMAC', gameCanvas.width / 2, 116);
 
-      ctx.fillStyle = '#fff8de';
-      ctx.font = 'bold 20px Courier New';
-      ctx.fillText(subtitle, boxX + 55, boxY + 102);
+    const promptW = 460;
+    const promptH = 54;
+    const promptX = Math.floor((gameCanvas.width - promptW) / 2);
+    const promptY = gameCanvas.height - 92;
+
+    ctx.fillStyle = 'rgba(12, 20, 48, 0.82)';
+    ctx.fillRect(promptX, promptY, promptW, promptH);
+    ctx.strokeStyle = '#5b74c5';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(promptX, promptY, promptW, promptH);
+
+    ctx.fillStyle = '#fff8de';
+    ctx.font = 'bold 22px Courier New';
+    ctx.fillText('ENTER PARA COMENZAR', gameCanvas.width / 2, promptY + 36);
+
+    ctx.textAlign = 'left';
+  }
+
+  function drawEndOverlay(title, subtitle) {
+    ctx.fillStyle = 'rgba(0,0,0,0.55)';
+    ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+    const boxW = 520;
+    const boxH = 150;
+    const boxX = Math.floor((gameCanvas.width - boxW) / 2);
+    const boxY = Math.floor((gameCanvas.height - boxH) / 2);
+
+    ctx.fillStyle = '#263f7a';
+    ctx.fillRect(boxX, boxY, boxW, boxH);
+
+    ctx.strokeStyle = '#5d78c9';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+    ctx.fillStyle = title.includes('Victoria') ? '#8fd36d' : '#ef476f';
+    ctx.font = 'bold 34px Courier New';
+    ctx.fillText(title, boxX + 90, boxY + 55);
+
+    ctx.fillStyle = '#fff8de';
+    ctx.font = 'bold 20px Courier New';
+    ctx.fillText(subtitle, boxX + 55, boxY + 102);
+  }
+
+  function drawPlayingScene() {
+    ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+
+    drawMapBackground();
+    drawWalls();
+    drawChests();
+    drawStartGoal();
+    drawMonsters();
+    drawPlayer();
+    drawHUD();
+  }
+
+  function draw() {
+    if (state.phase === GAME.title) {
+      drawTitleScreen();
+      return;
     }
 
-    function drawPlayingScene() {
-      ctx.clearRect(0, 0, gameCanvas.width, gameCanvas.height);
+    drawPlayingScene();
 
-      drawMapBackground();
-      drawWalls();
-      drawChests();
-      drawStartGoal();
-      drawMonsters();
-      drawPlayer();
-      drawHUD();
+    if (state.phase === GAME.win) {
+      drawEndOverlay('¡Victoria en Rimac!', 'Reinicia para jugar otra vez');
     }
 
-    function draw() {
-      if (state.phase === GAME.title) {
-        drawTitleScreen();
-        return;
-      }
+    if (state.phase === GAME.over) {
+      drawEndOverlay('Fin del juego', 'Los monstruos te detuvieron');
+    }
+  }
 
-      drawPlayingScene();
+  let lastTime = 0;
 
-      if (state.phase === GAME.win) {
-        drawEndOverlay('¡Victoria en Rimac!', 'Reinicia para jugar otra vez');
-      }
+  function loop(timestamp) {
+    const delta = Math.min((timestamp - lastTime) / 16.67, 2);
+    lastTime = timestamp;
 
-      if (state.phase === GAME.over) {
-        drawEndOverlay('Fin del juego', 'Los monstruos te detuvieron');
-      }
+    if (state.phase === GAME.playing) {
+      updateMonsters(delta);
+      checkCollisions();
     }
 
-    let lastTime = 0;
+    if (state.flashTimer > 0) state.flashTimer -= 1;
 
-    function loop(timestamp) {
-      const delta = Math.min((timestamp - lastTime) / 16.67, 2);
-      lastTime = timestamp;
-
-      if (state.phase === GAME.playing) {
-        updateMonsters(delta);
-        checkCollisions();
-      }
-
-      if (state.flashTimer > 0) state.flashTimer -= 1;
-
-      draw();
-      requestAnimationFrame(loop);
-    }
-
-    window.addEventListener('keydown', (e) => {
-      const key = e.key.toLowerCase();
-
-      if (
-        ['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d',' ','enter'].includes(key) ||
-        ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','Enter'].includes(e.key)
-      ) {
-        e.preventDefault();
-      }
-
-      if (state.phase === GAME.title && key === 'enter') {
-        startGame();
-        return;
-      }
-
-      if (key === 'arrowup' || key === 'w') movePlayer(0, -1);
-      if (key === 'arrowdown' || key === 's') movePlayer(0, 1);
-      if (key === 'arrowleft' || key === 'a') movePlayer(-1, 0);
-      if (key === 'arrowright' || key === 'd') movePlayer(1, 0);
-      if (e.key === ' ') useCookiePower();
-    });
-
-    startBtn.addEventListener('click', startGame);
-    restartBtn.addEventListener('click', restartGame);
-
-    resizeCanvasToMap();
-    restartGame();
+    draw();
     requestAnimationFrame(loop);
-  </script>
+  }
+
+  window.addEventListener('keydown', (e) => {
+    const key = e.key.toLowerCase();
+
+    if (
+      ['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d',' ','enter'].includes(key) ||
+      ['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','Enter'].includes(e.key)
+    ) {
+      e.preventDefault();
+    }
+
+    if (state.phase === GAME.title && key === 'enter') {
+      startGame();
+      return;
+    }
+
+    if (key === 'arrowup' || key === 'w') movePlayer(0, -1);
+    if (key === 'arrowdown' || key === 's') movePlayer(0, 1);
+    if (key === 'arrowleft' || key === 'a') movePlayer(-1, 0);
+    if (key === 'arrowright' || key === 'd') movePlayer(1, 0);
+    if (e.key === ' ') useCookiePower();
+  });
+
+  startBtn.addEventListener('click', startGame);
+  restartBtn.addEventListener('click', restartGame);
+
+  resizeCanvasToMap();
+  restartGame();
+  requestAnimationFrame(loop);
+    </script>
 </body>
 </html>

@@ -812,28 +812,38 @@
       ctx.fillRect(OFFSET_X, OFFSET_Y, MAP_WIDTH, MAP_HEIGHT);
     }
 
-    function drawWalls() {
-      for (const [wx, wy] of state.currentLevel.walls) {
-        if (state.level === 1) {
-          continue;
-        }
+function drawWalls() {
+  for (const [wx, wy] of state.currentLevel.walls) {
 
-        const { px, py } = tileToPixel(wx, wy);
-        const typeSeed = (wx * 7 + wy * 13) % 5;
+    const { px, py } = tileToPixel(wx, wy);
 
-        if (typeSeed === 0) {
-          drawCarObstacle(px, py);
-        } else if (typeSeed === 1) {
-          drawBarricadeObstacle(px, py);
-        } else if (typeSeed === 2) {
-          drawFenceObstacle(px, py);
-        } else if (typeSeed === 3) {
-          drawConeObstacle(px, py);
-        } else {
-          drawBushObstacle(px, py);
-        }
-      }
+    // 👉 NIVEL 2 (tu río invisible)
+    if (state.level === 1) {
+      continue;
     }
+
+    // 👉 NIVEL 3 → SOLO CONOS
+    if (state.level === 2) {
+      drawConeObstacle(px, py);
+      continue;
+    }
+
+    // 👉 NIVELES NORMALES (variedad)
+    const typeSeed = (wx * 7 + wy * 13) % 5;
+
+    if (typeSeed === 0) {
+      drawCarObstacle(px, py);
+    } else if (typeSeed === 1) {
+      drawBarricadeObstacle(px, py);
+    } else if (typeSeed === 2) {
+      drawFenceObstacle(px, py);
+    } else if (typeSeed === 3) {
+      drawConeObstacle(px, py);
+    } else {
+      drawBushObstacle(px, py);
+    }
+  }
+}
 
     function drawStartGoal() {
       const startPos = tileToPixel(state.currentLevel.start.x, state.currentLevel.start.y);
